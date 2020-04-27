@@ -38,7 +38,7 @@ describe UglyTrivia::Game do
         end
 
         it "game is not playable" do
-          expect(subject.is_playable?).to be(false)
+          expect(subject.is_playable?).to eq("Need more Players")
         end
       end
 
@@ -51,7 +51,7 @@ describe UglyTrivia::Game do
         end
 
         it "game is not playable" do
-          expect(subject.is_playable?).to be(false)
+          expect(subject.is_playable?).to eq("Need more Players")
         end
       end
     end
@@ -78,7 +78,7 @@ describe UglyTrivia::Game do
         let(:num_of_players) { 1 }
 
         it "cannot play game" do
-          expect(subject.is_playable?).to be(false)
+          expect(subject.is_playable?).to eq("Need more Players")
         end
       end
 

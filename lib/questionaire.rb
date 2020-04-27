@@ -35,9 +35,9 @@ class Questionaire
   def current_category(selection)
     CATEGORIES.each do |k, v|
       if v.include?(selection)
-        k.to_s.capitalize
+        return k.to_s.capitalize
       else
-        "Rock"
+        return "Rock"
       end
     end
   end
