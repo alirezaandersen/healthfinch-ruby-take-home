@@ -3,6 +3,11 @@
 # Require this file using `require "spec_helper"` to ensure that it is only
 # loaded once.
 #
+require 'rspec/autorun'
+require 'pry'
+require_relative '../lib/ugly_trivia/game.rb'
+require_relative '../lib/questionaire.rb'
+
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   # config.treat_symbols_as_metadata_keys_with_true_values = true
