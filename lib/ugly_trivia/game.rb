@@ -1,5 +1,4 @@
 require 'pry'
-# require_relative '../questionaire'
 
 module UglyTrivia
   class Game
@@ -71,15 +70,10 @@ module UglyTrivia
       if @in_penalty_box[@current_player]
         if roll % 2 != 0
           @is_getting_out_of_penalty_box = true
-
           output.out_of_penalty_box(current_player)
-
           current_position(roll)
-
           output.current_player_new_location(current_player, current_player_position)
-
           output.current_category(current_category)
-
           questionaire.ask_question(current_player_position)
         else
           output.stuck_in_plenty_box(current_player)
@@ -106,7 +100,7 @@ module UglyTrivia
         if @is_getting_out_of_penalty_box
           output.correct_answer
           @purses[@current_player] += 1
-          puts "#{current_player} now has #{@purses[@current_player]} Gold Coins."
+          output.bank_roll(current_player, @purses[@current_player])
           winner = did_player_win()
           next_player
           winner
@@ -119,7 +113,7 @@ module UglyTrivia
 
         output.correct_answer
         @purses[@current_player] += 1
-        puts "#{current_player} now has #{@purses[@current_player]} Gold Coins."
+        output.bank_roll(current_player, @purses[@current_player])
 
         winner = did_player_win
         next_player

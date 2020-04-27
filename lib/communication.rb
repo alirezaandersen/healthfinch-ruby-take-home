@@ -47,4 +47,7 @@ class Communication
     puts 'Question was incorrectly answered'
   end
 
+  def bank_roll(current_player, bank)
+    puts "#{current_player} now has #{bank} Gold Coins."
+  end
 end
