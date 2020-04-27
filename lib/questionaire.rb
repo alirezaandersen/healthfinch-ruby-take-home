@@ -1,5 +1,3 @@
-require 'pry'
-
 class Questionaire
 
   def initialize
@@ -18,23 +16,28 @@ class Questionaire
     end
   end
 
-  def ask_question
-    puts @pop_questions.shift if current_category == 'Pop'
-    puts @science_questions.shift if current_category == 'Science'
-    puts @sports_questions.shift if current_category == 'Sports'
-    puts @rock_questions.shift if current_category == 'Rock'
+  def create_rock_question(index)
+    "Rock Question #{index}"
   end
 
-  def current_category
-    return 'Pop' if @places[@current_player] == 0
-    return 'Pop' if @places[@current_player] == 4
-    return 'Pop' if @places[@current_player] == 8
-    return 'Science' if @places[@current_player] == 1
-    return 'Science' if @places[@current_player] == 5
-    return 'Science' if @places[@current_player] == 9
-    return 'Sports' if @places[@current_player] == 2
-    return 'Sports' if @places[@current_player] == 6
-    return 'Sports' if @places[@current_player] == 10
+  def ask_question(current_places)
+    puts @pop_questions.shift if current_category(current_places) == 'Pop'
+    puts @science_questions.shift if current_category(current_places) == 'Science'
+    puts @sports_questions.shift if current_category(current_places) == 'Sports'
+    puts @rock_questions.shift if current_category(current_places) == 'Rock'
+  end
+
+  def current_category(current_places)
+    return 'Pop' if current_places == 0
+    return 'Pop' if current_places == 4
+    return 'Pop' if current_places == 8
+    return 'Science' if current_places == 1
+    return 'Science' if current_places == 5
+    return 'Science' if current_places == 9
+    return 'Sports' if current_places == 2
+    return 'Sports' if current_places == 6
+    return 'Sports' if current_places == 10
     return 'Rock'
   end
+
 end
