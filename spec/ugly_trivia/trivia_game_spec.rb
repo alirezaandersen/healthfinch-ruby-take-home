@@ -21,7 +21,8 @@ describe UglyTrivia::Game do
         let!(:players) { [player1, player2] }
 
         it "name is added to instance of players" do
-          expect(subject.instance_variable_get(:@players)).to eq(["Zara", "Ziba"])
+          player = subject.instance_variable_get(:@players)
+          expect(player.map(&:name)).to eq(["Zara", "Ziba"])
         end
 
         it "game is playable" do
@@ -34,7 +35,8 @@ describe UglyTrivia::Game do
         let(:num_of_players) { 1 }
 
         it "name is added to instance of players" do
-          expect(subject.instance_variable_get(:@players)).to eq(["Zara"])
+          player = subject.instance_variable_get(:@players)
+          expect(player.map(&:name)).to eq(["Zara"])
         end
 
         it "game is not playable" do
@@ -86,12 +88,12 @@ describe UglyTrivia::Game do
 
         it "shows current_player" do
           current_player = subject.instance_variable_get(:@players)[subject.instance_variable_get(:@current_player)]
-          expect(current_player).to eq("Zara")
+          expect(current_player.name).to eq("Zara")
         end
       end
 
       context "when current_player is in_penalty_box" do
-        before { subject.instance_variable_set(:@in_penalty_box, [true]) }
+        before {  subject.current_player.go_in_penalty_box }
 
         context "if roll is odd" do
 
@@ -127,7 +129,7 @@ describe UglyTrivia::Game do
 
         context "when in plenty box" do
 
-          before {  subject.instance_variable_set(:@in_penalty_box, [true, true]) }
+          before {  subject.current_player.go_in_penalty_box }
 
           context "trying to get out of plently box" do
 
@@ -146,8 +148,6 @@ describe UglyTrivia::Game do
             context "is getting out of the penalty box" do
               let!(:current_player_position) { 1 }
 
-              before { subject.instance_variable_set(:@current_player, current_player_position) }
-
               it "winner winner chicken dinner" do
                 expect(subject.was_correctly_answered).to be(true)
               end
@@ -158,7 +158,6 @@ describe UglyTrivia::Game do
             let!(:current_player_position) { 0 }
 
             before do
-              subject.instance_variable_set(:@current_player, current_player_position)
               subject.instance_variable_set(:@is_getting_out_of_penalty_box, false)
             end
 
@@ -166,13 +165,12 @@ describe UglyTrivia::Game do
               subject.was_correctly_answered
               expect(subject.instance_variable_get(:@current_player)).to eq(1)
               current_player = subject.instance_variable_get(:@players)[subject.instance_variable_get(:@current_player)]
-              expect(current_player).to eq("Ziba")
+              expect(current_player.name).to eq("Ziba")
             end
           end
         end
 
         context "when not in plenty box" do
-          before {  subject.instance_variable_set(:@in_penalty_box, [false, false]) }
 
           context "current_player doesn't score a win" do
             let!(:current_player_score) { [5] }
@@ -187,8 +185,6 @@ describe UglyTrivia::Game do
           context "current_player wins" do
             let!(:current_player_position) { 1 }
 
-            before { subject.instance_variable_set(:@current_player, current_player_position) }
-
             it "winner winner chicken dinner" do
               expect(subject.was_correctly_answered).to be(true)
             end
@@ -199,12 +195,10 @@ describe UglyTrivia::Game do
       context "when incorrectly answering questions" do
         let!(:current_player_position) { 1 }
 
-        before { subject.instance_variable_set(:@in_penalty_box, [false, false]) }
-        before { subject.instance_variable_set(:@current_player, current_player_position) }
-
         it "puts current_player in the penalty_box" do
-          expect(subject.wrong_answer).to be(true)
-          expect(subject.instance_variable_get(:@in_penalty_box)).to eq([false, true])
+          subject.wrong_answer
+          subject.next_player #forces player1 to be current player for testing
+          expect(subject.current_player.in_penalty_box?).to eq(true)
         end
       end
     end
