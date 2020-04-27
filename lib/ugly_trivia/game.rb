@@ -9,7 +9,7 @@ module UglyTrivia
       @players = []
       @places = Array.new(6, 0)
       @purses = Array.new(6, 0)
-      @in_penalty_box = Array.new(6, nil)
+      # @in_penalty_box = Array.new(6, nil)
       @questionaire = questionaire
       @current_player = 0
       @is_getting_out_of_penalty_box = false
@@ -29,15 +29,22 @@ module UglyTrivia
     end
 
     def add(player_name)
-      @players.push player_name
+      # @players.push player_name
+      player = Player.new(player_name)
+      @players.push(player)
       @places[how_many_players] = 0
       @purses[how_many_players] = 0
-      @in_penalty_box[how_many_players] = false
-
+      # @in_penalty_box[how_many_players] = false
+      # binding.pry
+      player.go_in_penalty_box if invalid_game?
       output.add_player(player_name)
       output.num_of_players(how_many_players)
 
       true
+    end
+
+    def invalid_game?
+      how_many_players.zero?
     end
 
     def how_many_players
@@ -67,7 +74,7 @@ module UglyTrivia
       output.who_has_the_dice(current_player)
       output.current_roll(roll)
 
-      if @in_penalty_box[@current_player]
+      if current_player.in_penalty_box?
         if roll % 2 != 0
           @is_getting_out_of_penalty_box = true
           output.out_of_penalty_box(current_player)
@@ -96,7 +103,7 @@ module UglyTrivia
     public
 
     def was_correctly_answered
-      if @in_penalty_box[@current_player]
+      if current_player.in_penalty_box?
         if @is_getting_out_of_penalty_box
           output.correct_answer
           @purses[@current_player] += 1
@@ -110,7 +117,6 @@ module UglyTrivia
         end
 
       else
-
         output.correct_answer
         @purses[@current_player] += 1
         output.bank_roll(current_player, @purses[@current_player])
@@ -124,7 +130,7 @@ module UglyTrivia
     def wrong_answer
       output.incorrect_answer
       output.going_in_plenty_box(current_player)
-      @in_penalty_box[@current_player] = true
+      current_player.go_in_penalty_box
       next_player
 
       return true
