@@ -25,11 +25,11 @@ class Questionaire
     end
   end
 
-  def ask_question(current_places)
-    puts @pop_questions.shift if POP.include?(current_places)
-    puts @science_questions.shift if SCIENCE.include?(current_places)
-    puts @sports_questions.shift if SPORTS.include?(current_places)
-    puts @rock_questions.shift unless CATEGORIES.values.flatten.include?(current_places)
+  def ask_question(selection)
+    puts @pop_questions.shift if POP.include?(selection)
+    puts @science_questions.shift if SCIENCE.include?(selection)
+    puts @sports_questions.shift if SPORTS.include?(selection)
+    puts @rock_questions.shift unless CATEGORIES.values.flatten.include?(selection)
   end
 
   def current_category(selection)
