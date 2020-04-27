@@ -8,6 +8,7 @@ require 'pry'
 require_relative '../lib/ugly_trivia/game.rb'
 require_relative '../lib/questionaire.rb'
 require_relative '../lib/communication.rb'
+require_relative '../lib/player.rb'
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|

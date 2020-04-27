@@ -4,6 +4,7 @@ $:.unshift(File.dirname(__FILE__) + '/../lib')
 require 'ugly_trivia/game'
 require 'questionaire'
 require 'communication'
+require 'player'
 
 
 not_a_winner = false
