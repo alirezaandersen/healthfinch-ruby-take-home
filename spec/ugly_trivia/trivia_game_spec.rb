@@ -121,48 +121,6 @@ describe UglyTrivia::Game do
       end
     end
 
-    xdescribe "Question and Categories" do
-      subject { game }
-
-      before do
-         subject.instance_variable_set(:@places, [category_selection] )
-         allow_any_instance_of(UglyTrivia::Game).to receive(:how_many_players) { num_of_players }
-         subject.is_playable?
-       end
-
-      context "when current_category Pop" do
-        let(:category_selection) { [ 0, 4, 8].sample }
-        it "removes a question from Pop" do
-          subject.send(:ask_question)
-          expect(subject.instance_variable_get(:@pop_questions).size).to eq(49)
-        end
-      end
-
-      context "when current_category Science" do
-        let(:category_selection) { [ 1, 5, 9].sample }
-        it "removes a question from Science" do
-          subject.send(:ask_question)
-          expect(subject.instance_variable_get(:@science_questions).size).to eq(49)
-        end
-      end
-
-      context "when current_category Sports" do
-        let(:category_selection) { [2, 6, 10].sample }
-        it "removes a question from Sports" do
-          subject.send(:ask_question)
-          expect(subject.instance_variable_get(:@sports_questions).size).to eq(49)
-        end
-      end
-
-      context "when current_category Rock" do
-        let(:category_selection) { [] }
-        it "removes a question from Rock" do
-          subject.send(:ask_question)
-          expect(subject.instance_variable_get(:@rock_questions).size).to eq(49)
-        end
-      end
-    end
-
     describe "Answering Questions" do
       subject { game }
 
