@@ -1,8 +1,4 @@
 require 'spec_helper'
-require 'rspec/autorun'
-require 'pry'
-require_relative '../../lib/ugly_trivia/game.rb'
-
 
 describe UglyTrivia::Game do
 
