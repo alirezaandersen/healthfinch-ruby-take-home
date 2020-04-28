@@ -9,7 +9,6 @@ module UglyTrivia
       @players = []
       @places = Array.new(6, 0)
       @purses = Array.new(6, 0)
-      # @in_penalty_box = Array.new(6, nil)
       @questionaire = questionaire
       @current_player = 0
       @is_getting_out_of_penalty_box = false
@@ -29,45 +28,15 @@ module UglyTrivia
     end
 
     def add(player_name)
-      # @players.push player_name
       player = Player.new(player_name)
       @players.push(player)
       @places[how_many_players] = 0
       @purses[how_many_players] = 0
-      # @in_penalty_box[how_many_players] = false
-      # binding.pry
       player.go_in_penalty_box if invalid_game?
       output.add_player(player_name)
       output.num_of_players(how_many_players)
 
       true
-    end
-
-    def invalid_game?
-      how_many_players.zero?
-    end
-
-    def how_many_players
-      @players.length
-    end
-
-    def current_player
-      @players[@current_player]
-    end
-
-    def next_player
-      @current_player += 1
-      @current_player = 0 if @current_player == how_many_players
-      self
-    end
-
-    def current_position(roll)
-      @places[@current_player] = @places[@current_player] + roll
-      @places[@current_player] = @places[@current_player] - 12 if @places[@current_player] > 11
-    end
-
-    def current_player_position
-      @places[@current_player]
     end
 
     def roll(roll)
@@ -95,12 +64,6 @@ module UglyTrivia
         questionaire.ask_question(current_player_position)
       end
     end
-
-    def current_category
-      questionaire.current_category(current_player_position)
-    end
-
-    public
 
     def was_correctly_answered
       if current_player.in_penalty_box?
@@ -138,8 +101,39 @@ module UglyTrivia
 
     private
 
+    def current_category
+      questionaire.current_category(current_player_position)
+    end
+
+    def current_position(roll)
+      @places[@current_player] = @places[@current_player] + roll
+      @places[@current_player] = @places[@current_player] - 12 if @places[@current_player] > 11
+    end
+
+    def current_player_position
+      @places[@current_player]
+    end
+
+    def current_player
+      @players[@current_player]
+    end
+
+    def next_player
+      @current_player += 1
+      @current_player = 0 if @current_player == how_many_players
+      self
+    end
+
     def did_player_win
       !(@purses[@current_player] == 6)
+    end
+
+    def how_many_players
+      @players.length
+    end
+
+    def invalid_game?
+      how_many_players.zero?
     end
   end
 end

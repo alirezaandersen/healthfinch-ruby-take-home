@@ -93,7 +93,7 @@ describe UglyTrivia::Game do
       end
 
       context "when current_player is in_penalty_box" do
-        before {  subject.current_player.go_in_penalty_box }
+        before {  subject.send(:current_player).go_in_penalty_box }
 
         context "if roll is odd" do
 
@@ -129,7 +129,7 @@ describe UglyTrivia::Game do
 
         context "when in plenty box" do
 
-          before {  subject.current_player.go_in_penalty_box }
+          before {  subject.send(:current_player).go_in_penalty_box }
 
           context "trying to get out of plently box" do
 
@@ -197,8 +197,8 @@ describe UglyTrivia::Game do
 
         it "puts current_player in the penalty_box" do
           subject.wrong_answer
-          subject.next_player #forces player1 to be current player for testing
-          expect(subject.current_player.in_penalty_box?).to eq(true)
+          subject.send(:next_player) #forces player1 to be current player for testing propose only
+          expect(subject.send(:current_player).in_penalty_box?).to eq(true)
         end
       end
     end
