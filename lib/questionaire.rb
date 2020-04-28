@@ -1,3 +1,5 @@
+require 'pry'
+
 class Questionaire
 
   POP = [0, 4, 8].freeze

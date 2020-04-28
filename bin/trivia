@@ -25,6 +25,4 @@ begin
     not_a_winner = game.was_correctly_answered
   end
 
-
-
 end while not_a_winner

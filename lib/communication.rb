@@ -1,3 +1,5 @@
+require 'pry'
+
 class Communication
 
   def initialize
@@ -20,7 +22,7 @@ class Communication
   end
 
   def out_of_penalty_box(current_player)
-    puts "#{current_player.name} is getting out of the penalty box"
+    puts "#{current_player} is getting out of the penalty box"
   end
 
   def current_player_new_location(current_player, current_player_position)
@@ -32,11 +34,11 @@ class Communication
   end
 
   def stuck_in_plenty_box(current_player)
-    "#{current_player.name} is not getting out of the penalty box"
+    puts "#{current_player} is not getting out of the penalty box"
   end
 
   def going_in_plenty_box(current_player)
-    puts "#{current_player.name} was sent to the penalty box"
+    puts "#{current_player} was sent to the penalty box"
   end
 
   def correct_answer
@@ -48,7 +50,6 @@ class Communication
   end
 
   def bank_roll(current_player, bank)
-    # binding.pry
     puts "#{current_player.name} now has #{bank} Gold Coins."
   end
 end

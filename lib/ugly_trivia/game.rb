@@ -11,7 +11,6 @@ module UglyTrivia
       @purses = Array.new(6, 0)
       @questionaire = questionaire
       @current_player = 0
-      @is_getting_out_of_penalty_box = false
     end
 
     def is_playable?
@@ -21,10 +20,6 @@ module UglyTrivia
       else
         return "Need more Players"
       end
-    end
-
-    def output
-      Communication.new()
     end
 
     def add(player_name)
@@ -45,29 +40,26 @@ module UglyTrivia
 
       if current_player.in_penalty_box?
         if roll % 2 != 0
-          @is_getting_out_of_penalty_box = true
-          output.out_of_penalty_box(current_player)
-          current_position(roll)
-          output.current_player_new_location(current_player, current_player_position)
-          output.current_category(current_category)
-          questionaire.ask_question(current_player_position)
+          current_player.getting_out_of_penalty_box
+          roll_question(roll)
         else
-          output.stuck_in_plenty_box(current_player)
-          @is_getting_out_of_penalty_box = false
+          current_player.still_in_penalty_box?
         end
-
       else
-
-        current_position(roll)
-        output.current_player_new_location(current_player, current_player_position)
-        output.current_category(current_category)
-        questionaire.ask_question(current_player_position)
+        roll_question(roll)
       end
+    end
+
+    def roll_question(roll)
+      current_position(roll)
+      output.current_player_new_location(current_player, current_player_position)
+      output.current_category(current_category)
+      questionaire.ask_question(current_player_position)
     end
 
     def was_correctly_answered
       if current_player.in_penalty_box?
-        if @is_getting_out_of_penalty_box
+        if current_player.still_in_penalty_box?
           output.correct_answer
           @purses[@current_player] += 1
           output.bank_roll(current_player, @purses[@current_player])
@@ -92,7 +84,7 @@ module UglyTrivia
 
     def wrong_answer
       output.incorrect_answer
-      output.going_in_plenty_box(current_player)
+      # output.going_in_plenty_box(current_player)
       current_player.go_in_penalty_box
       next_player
 
@@ -106,8 +98,8 @@ module UglyTrivia
     end
 
     def current_position(roll)
-      @places[@current_player] = @places[@current_player] + roll
-      @places[@current_player] = @places[@current_player] - 12 if @places[@current_player] > 11
+      @places[@current_player] += roll
+      @places[@current_player] = (@places[@current_player] - 12) if @places[@current_player] > 11
     end
 
     def current_player_position
@@ -134,6 +126,10 @@ module UglyTrivia
 
     def invalid_game?
       how_many_players.zero?
+    end
+
+    def output
+      Communication.new()
     end
   end
 end

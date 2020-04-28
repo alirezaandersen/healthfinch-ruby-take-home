@@ -59,7 +59,6 @@ describe UglyTrivia::Game do
     end
   end
 
-
   describe "The Game" do
 
     let(:player1) { "Zara" }
@@ -99,7 +98,7 @@ describe UglyTrivia::Game do
 
           it "player gets out of penalty box" do
             subject.roll(5)
-            expect(subject.instance_variable_get(:@is_getting_out_of_penalty_box)).to be(true)
+            expect(subject.send(:current_player).still_in_penalty_box?).to be(true)
           end
         end
 
@@ -107,7 +106,7 @@ describe UglyTrivia::Game do
 
           it "player stays in plenty box" do
             subject.roll(8)
-            expect(subject.instance_variable_get(:@is_getting_out_of_penalty_box)).to be(false)
+            expect(subject.send(:current_player).still_in_penalty_box?).to be(false)
           end
         end
       end
@@ -138,7 +137,10 @@ describe UglyTrivia::Game do
             context "not getting out of the penalty box" do
               let!(:current_player_score) { [5] }
 
-              before { subject.instance_variable_set(:@purses, current_player_score) }
+              before do
+                subject.instance_variable_set(:@purses, current_player_score)
+                subject.send(:current_player).getting_out_of_penalty_box
+              end
 
               it "games continues with no winner" do
                 expect(subject.was_correctly_answered).to be(false)
@@ -157,9 +159,7 @@ describe UglyTrivia::Game do
           context "will stay in plenty box" do
             let!(:current_player_position) { 0 }
 
-            before do
-              subject.instance_variable_set(:@is_getting_out_of_penalty_box, false)
-            end
+            before { subject.instance_variable_set(:@is_getting_out_of_penalty_box, false) }
 
             it "goes to next player" do
               subject.was_correctly_answered
