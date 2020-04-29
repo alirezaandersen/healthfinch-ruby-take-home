@@ -10,7 +10,7 @@ class Communication
   end
 
   def num_of_players(how_many_players)
-    puts "They are player number #{how_many_players}"
+    puts "There are player number #{how_many_players}"
   end
 
   def who_has_the_dice(current_player)

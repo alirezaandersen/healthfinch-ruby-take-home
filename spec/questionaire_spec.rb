@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe Questionaire do
 
   describe "Question and Categories" do
@@ -44,4 +43,5 @@ describe Questionaire do
       end
     end
   end
+
 end
