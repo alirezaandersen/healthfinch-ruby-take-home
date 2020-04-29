@@ -45,15 +45,21 @@ describe Player do
   end
 
   describe "location" do
-    let(:roll) { 2 }
+    let(:steps_forward) {11 }
+    let(:steps_backward) { 15 }
     it "starts of empty" do
       subject.location
       expect(subject.instance_variable_get(:@places)).to eq(0)
     end
 
-    it "moves location" do
-      subject.move_location(roll)
-      expect(subject.instance_variable_get(:@places)).to eq(2)
+    it "moves location forward" do
+      subject.move_location(steps_forward)
+      expect(subject.instance_variable_get(:@places)).to eq(11)
+    end
+
+    it "moves location backword if EXCEED_LIMIT" do
+      subject.move_location(steps_backward)
+      expect(subject.instance_variable_get(:@places)).to eq(3)
     end
   end
 end
