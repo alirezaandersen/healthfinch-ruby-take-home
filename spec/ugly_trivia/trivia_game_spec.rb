@@ -113,10 +113,9 @@ describe UglyTrivia::Game do
 
       context "when current_player is not in the plenty box" do
 
-        it "sets position of current_player ahead by number of theroll" do
+        it "sets position of current_player ahead by number of the roll" do
           subject.roll(3)
-          current_player_position = subject.instance_variable_get(:@places)[subject.instance_variable_get(:@current_player)]
-          expect(current_player_position).to eq(3)
+          expect(subject.send(:current_player).location).to eq(3)
         end
       end
     end
@@ -135,10 +134,10 @@ describe UglyTrivia::Game do
             before { subject.instance_variable_set(:@is_getting_out_of_penalty_box, true) }
 
             context "not getting out of the penalty box" do
-              let!(:current_player_score) { [5] }
+              let!(:current_player_score) { 5 }
 
               before do
-                subject.instance_variable_set(:@purses, current_player_score)
+                subject.send(:current_player).instance_variable_set(:@bank, current_player_score)
                 subject.send(:current_player).getting_out_of_penalty_box
               end
 
@@ -173,9 +172,9 @@ describe UglyTrivia::Game do
         context "when not in plenty box" do
 
           context "current_player doesn't score a win" do
-            let!(:current_player_score) { [5] }
+            let!(:current_player_score) { 5 }
 
-            before { subject.instance_variable_set(:@purses, current_player_score) }
+            before { subject.send(:current_player).instance_variable_set(:@bank, current_player_score) }
 
             it "games continues with no winner" do
               expect(subject.was_correctly_answered).to be(false)

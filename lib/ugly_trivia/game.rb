@@ -7,8 +7,6 @@ module UglyTrivia
 
     def  initialize(questionaire = Questionaire.new)
       @players = []
-      @places = Array.new(6, 0)
-      @purses = Array.new(6, 0)
       @questionaire = questionaire
       @current_player = 0
     end
@@ -25,13 +23,7 @@ module UglyTrivia
     def add(player_name)
       player = Player.new(player_name)
       @players.push(player)
-      @places[how_many_players] = 0
-      @purses[how_many_players] = 0
-      player.go_in_penalty_box if invalid_game?
-      output.add_player(player_name)
-      output.num_of_players(how_many_players)
-
-      true
+      setup_game(player_name)
     end
 
     def roll(roll)
@@ -43,6 +35,7 @@ module UglyTrivia
           current_player.getting_out_of_penalty_box
           roll_question(roll)
         else
+          output.stuck_in_plenty_box(current_player)
           current_player.still_in_penalty_box?
         end
       else
@@ -51,40 +44,35 @@ module UglyTrivia
     end
 
     def roll_question(roll)
-      current_position(roll)
-      output.current_player_new_location(current_player, current_player_position)
-      output.current_category(current_category)
-      questionaire.ask_question(current_player_position)
+      current_player.move_location(roll)
+      current_category
+      questionaire.ask_question(current_player.location)
     end
 
     def was_correctly_answered
       if current_player.in_penalty_box?
         if current_player.still_in_penalty_box?
           output.correct_answer
-          @purses[@current_player] += 1
-          output.bank_roll(current_player, @purses[@current_player])
-          winner = did_player_win()
-          next_player
-          winner
+          correct_answer_prize
         else
           next_player
           true
         end
-
       else
-        output.correct_answer
-        @purses[@current_player] += 1
-        output.bank_roll(current_player, @purses[@current_player])
-
-        winner = did_player_win
-        next_player
-        return winner
+      correct_answer_prize
       end
+    end
+
+    def correct_answer_prize
+      output.correct_answer
+      current_player.bank_roll
+      keep_playing = !current_player.winner?
+      next_player
+      keep_playing
     end
 
     def wrong_answer
       output.incorrect_answer
-      # output.going_in_plenty_box(current_player)
       current_player.go_in_penalty_box
       next_player
 
@@ -94,16 +82,8 @@ module UglyTrivia
     private
 
     def current_category
-      questionaire.current_category(current_player_position)
-    end
-
-    def current_position(roll)
-      @places[@current_player] += roll
-      @places[@current_player] = (@places[@current_player] - 12) if @places[@current_player] > 11
-    end
-
-    def current_player_position
-      @places[@current_player]
+      category = questionaire.current_category(current_player.location)
+      output.current_category(category)
     end
 
     def current_player
@@ -116,10 +96,6 @@ module UglyTrivia
       self
     end
 
-    def did_player_win
-      !(@purses[@current_player] == 6)
-    end
-
     def how_many_players
       @players.length
     end
@@ -130,6 +106,14 @@ module UglyTrivia
 
     def output
       Communication.new()
+    end
+
+    def setup_game(player_name)
+      current_player.bank
+      current_player.location
+      player.go_in_penalty_box if invalid_game?
+      output.add_player(player_name)
+      output.num_of_players(how_many_players)
     end
   end
 end

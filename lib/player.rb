@@ -10,9 +10,8 @@ class Player
 
   def initialize(player_name)
     @name = player_name
-    @current_place = 0
-    @places = 0 #current_player_position
-    # @bank = 0 #bankroll is purses
+    @places = 0
+    @bank = 0
     @in_penalty_box = false
     @is_getting_out_of_penalty_box = false
   end
@@ -27,7 +26,6 @@ class Player
   end
 
   def still_in_penalty_box?
-    output.stuck_in_plenty_box(name)
     @is_getting_out_of_penalty_box
   end
 
@@ -36,10 +34,29 @@ class Player
     output.out_of_penalty_box(name)
   end
 
+  def bank
+    @bank
+  end
+
   def bank_roll
+    @bank += 1
+    output.bank_roll(name, bank)
+  end
+
+  def winner?
+    @bank == WINNER
+  end
+
+  def location
     @places
   end
 
+  def move_location(roll)
+    @places += roll
+    @places -= EXCEED_LIMIT if @places > LIMIT
+    output.current_player_new_location(name, location)
+    @places
+  end
 
   private
 

@@ -25,8 +25,8 @@ class Communication
     puts "#{current_player} is getting out of the penalty box"
   end
 
-  def current_player_new_location(current_player, current_player_position)
-    puts "#{current_player.name}'s new location is #{current_player_position}"
+  def current_player_new_location(current_player, location)
+    puts "#{current_player}'s new location is #{location}"
   end
 
   def current_category(current_category)
@@ -34,7 +34,7 @@ class Communication
   end
 
   def stuck_in_plenty_box(current_player)
-    puts "#{current_player} is not getting out of the penalty box"
+    puts "#{current_player.name} is not getting out of the penalty box"
   end
 
   def going_in_plenty_box(current_player)
@@ -50,6 +50,6 @@ class Communication
   end
 
   def bank_roll(current_player, bank)
-    puts "#{current_player.name} now has #{bank} Gold Coins."
+    puts "#{current_player} now has #{bank} Gold Coins."
   end
 end
